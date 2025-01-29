@@ -10,6 +10,8 @@ environment:
   contents:
     packages:
       - go
+  environment:
+    CGO_ENABLED: "0"
 
 pipeline:
   - uses: git-checkout
@@ -20,9 +22,13 @@ pipeline:
 
   - uses: go/build
     with:
-      packages: ./monstache.go
+      packages: .
       ldflags: -s -w
       output: monstache
+  
+  - runs: |
+      mkdir -p "${{targets.contextdir}}/bin"
+      ln -sf /usr/bin/monstache ${{targets.contextdir}}/bin/monstache
 
   - uses: strip
 
