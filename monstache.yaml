@@ -1,0 +1,33 @@
+package:
+  name: monstache
+  version: v6.7.19
+  epoch: 0
+  description: "A go daemon that syncs mongodb to elasticsearch in realtime"
+  copyright:
+    - license: MIT
+
+environment:
+  contents:
+    packages:
+      - go
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/rwynn/monstache
+      tag: ${{package.version}}
+      expected-commit: b3c0dcf686e0e6b4a9ca5d24a3e63e184cb4429d
+
+  - uses: go/build
+    with:
+      packages: ./monstache.go
+      ldflags: -s -w
+      output: monstache
+
+  - uses: strip
+
+update:
+  enabled: true
+  github:
+    identifier: rwynn/monstache
+    strip-prefix: v
